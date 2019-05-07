@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HungModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="Book_Code" />
+          </Key>
+          <Property Name="Book_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Book_Class" Type="nvarchar" MaxLength="20" />
+          <Property Name="Book_PurchaseTime" Type="date" />
+          <Property Name="Book_Name" Type="nvarchar" MaxLength="30" />
+          <Property Name="Book_Author" Type="nvarchar" MaxLength="30" />
+          <Property Name="Book_Publisher" Type="nvarchar" MaxLength="30" />
+          <Property Name="Book_Introduction" Type="nvarchar(max)" />
+          <Property Name="Book_Status" Type="char" MaxLength="1" />
+          <Property Name="Member_Code" Type="int" />
+          <Property Name="Member_Name" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="BookClass">
+          <Key>
+            <PropertyRef Name="Class_Code" />
+          </Key>
+          <Property Name="Class_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Book_Class" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="Member_Code" />
+          </Key>
+          <Property Name="Member_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Member_Name" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityContainer Name="HungModelStoreContainer">
+          <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookClass" EntityType="Self.BookClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HungModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="Book_Code" />
+          </Key>
+          <Property Name="Book_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Book_Class" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Book_PurchaseTime" Type="DateTime" Precision="0" />
+          <Property Name="Book_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Book_Author" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Book_Publisher" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Book_Introduction" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Book_Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Member_Code" Type="Int32" />
+          <Property Name="Member_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BookClass">
+          <Key>
+            <PropertyRef Name="Class_Code" />
+          </Key>
+          <Property Name="Class_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Book_Class" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="Member_Code" />
+          </Key>
+          <Property Name="Member_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Member_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="ChiEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Book" EntityType="Self.Book" />
+          <EntitySet Name="BookClass" EntityType="Self.BookClass" />
+          <EntitySet Name="Member" EntityType="Self.Member" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HungModelStoreContainer" CdmEntityContainer="ChiEntities">
+          <EntitySetMapping Name="Book">
+            <EntityTypeMapping TypeName="HungModel.Book">
+              <MappingFragment StoreEntitySet="Book">
+                <ScalarProperty Name="Member_Name" ColumnName="Member_Name" />
+                <ScalarProperty Name="Book_Code" ColumnName="Book_Code" />
+                <ScalarProperty Name="Book_Class" ColumnName="Book_Class" />
+                <ScalarProperty Name="Book_PurchaseTime" ColumnName="Book_PurchaseTime" />
+                <ScalarProperty Name="Book_Name" ColumnName="Book_Name" />
+                <ScalarProperty Name="Book_Author" ColumnName="Book_Author" />
+                <ScalarProperty Name="Book_Publisher" ColumnName="Book_Publisher" />
+                <ScalarProperty Name="Book_Introduction" ColumnName="Book_Introduction" />
+                <ScalarProperty Name="Book_Status" ColumnName="Book_Status" />
+                <ScalarProperty Name="Member_Code" ColumnName="Member_Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BookClass">
+            <EntityTypeMapping TypeName="HungModel.BookClass">
+              <MappingFragment StoreEntitySet="BookClass">
+                <ScalarProperty Name="Class_Code" ColumnName="Class_Code" />
+                <ScalarProperty Name="Book_Class" ColumnName="Book_Class" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Member">
+            <EntityTypeMapping TypeName="HungModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="Member_Code" ColumnName="Member_Code" />
+                <ScalarProperty Name="Member_Name" ColumnName="Member_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

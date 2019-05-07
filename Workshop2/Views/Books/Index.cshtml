@@ -1,0 +1,193 @@
+﻿@using Workshop2.Models
+@model Workshop2.Models.VM.BookMemberVM
+
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    body{
+        font-family: Microsoft JhengHei;
+    }
+</style>
+<h2>圖書維護</h2>
+
+<p>
+    <a class="btn btn-primary" href="/Books/Create/">新增書籍</a>
+    <a class="btn btn-primary" href="/Books/Search/">搜尋書籍</a>
+</p>
+<table class="table table-hover ">
+    <thead style="background: #58B2DC">
+    <tr>
+        <th>
+            圖書類別
+        </th>
+        <th>
+            書名
+        </th>
+        <th>
+            購書日期
+        </th>
+        <th>
+            借閱狀態
+        </th>
+        <th>
+            借閱人
+        </th>
+        <th>
+        </th>
+    </tr>
+    </thead>
+    <tbody id ="PageContent">
+    @foreach (var item in Model.Book)
+    {
+        <tr>
+            <td style="display: none">
+                <input type="text" value="@item.Book_Code" hidden/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book_Class)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book_Name)
+            </td>
+            <td>
+                @item.Book_PurchaseTime.Value.ToString("yyyy/MM/dd")
+            </td>
+            <td>
+                @if (item.Book_Status == "A")
+                {
+                    <b>可以借出</b>
+                }
+                else if (item.Book_Status == "B")
+                {
+                    <b>已借出</b>
+                }
+                else if (item.Book_Status == "U")
+                {
+                    <b>不可借出</b>
+                }
+                else if (item.Book_Status == "C")
+                {
+                    <b>已借出(未領)</b>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member_Name)
+            </td>
+            <td>
+                <a class="btn btn-info" href="/Books/Edit/@item.Book_Code">編輯</a>
+                <a class="btn btn-danger" href="/Books/Delete/@item.Book_Code">刪除</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<div class="pagination" style="font-size: 16px">
+    <a href="#" onclick="changePage('forward')" >&laquo;</a>
+    <input type="number" id ="nowPage" style="width: 40px; " min="1"  readonly/>
+    /&nbsp;<b id="TotalPage"  ></b>
+    <a href="#" onclick="changePage('backward')">&raquo;</a>
+</div>
+
+<script>
+    
+    var totalPage = Math.ceil(@ViewBag.BookNum / 7);
+    var nowPage = document.getElementById("nowPage");
+    nowPage.setAttribute("max",totalPage);
+    document.getElementById("TotalPage").innerText = totalPage;
+    nowPage.value = 1;
+    var filed = ["Book_Class", "Book_Name", "Book_PurchaseTime", "Book_Status", "Member_Name", ""];
+
+    function changePage(actionFB) {
+        if (actionFB=='forward') {
+            if (nowPage.value != 1) {
+                nowPage.value -= 1;
+            }
+        } else {
+            if (nowPage.value != parseInt(totalPage)) {
+                nowPage.value = parseInt(nowPage.value)+1;
+            }
+        }
+        var PageContent = document.getElementById("PageContent");
+        while (PageContent.firstChild) {
+            PageContent.removeChild(PageContent.firstChild);
+        }
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/Books/PageInfo/"+nowPage.value, true);
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var jsonData = JSON.parse(this.response);
+                for (var i = 0; i < jsonData.length; i++) {
+                    var tr = document.createElement("tr");
+                    for (var k=0 ;k< filed.length;k++) {
+                        var td = document.createElement("td");
+                        var fildName = filed[k];
+                        //檢測是否為日期或字串
+                        if ( typeof jsonData[i][fildName] == "string") {
+                            //日期formate(yyyy/MM/dd)
+                            if (jsonData[i][fildName].match(/Date.*/) ) {
+                                var dateString = jsonData[i][fildName].replace("/Date(","").replace(")/","");
+                                var date = new Date(parseInt(dateString));
+                                var year =date.getUTCFullYear(),
+                                        month=date.getUTCMonth()+1,
+                                        day=date.getUTCDay()+1,
+                                        fulldate;
+                                fulldate = year+"/";
+                                if (month <10) {
+                                    fulldate = fulldate + "0" + month + "/";
+                                } else {
+                                    fulldate = fulldate + month + "/";
+                                }
+                                if (day<10) {
+                                    fulldate = fulldate + "0" + day;
+                                } else {
+                                    fulldate = fulldate + day;
+                                }
+                                td.innerText = fulldate;
+                            }
+                            //轉換狀態碼
+                            else if (fildName == "Book_Status") {
+                                if (jsonData[i][fildName] == "A") {
+                                    td.innerText = "可以借出"
+                                } 
+                                else if(jsonData[i][fildName] == "B"){
+                                    td.innerText = "已借出"
+                                } 
+                                else if(jsonData[i][fildName] == "U"){
+                                    td.innerText = "不可借出"
+                                } 
+                                else if(jsonData[i][fildName] == "C"){
+                                    td.innerText = "已借出(未領)"
+                                }
+                            }
+                            else {
+                                td.innerText = jsonData[i][fildName];
+                            }
+                        } 
+                        //建立最後一列功能欄
+                        else if (k == filed.length-1) {
+                            var a = document.createElement("a");
+                            a.setAttribute("class","btn btn-info") ;
+                            a.setAttribute("href","/Books/Edit/"+jsonData[i]["Book_Code"]) ;
+                            a.innerText = "編輯";
+                            td.appendChild(a);
+                            a = document.createElement("a");
+                            a.setAttribute("class","btn btn-danger") ;
+                            a.setAttribute("href","/Books/Delete/"+jsonData[i]["Book_Code"]) ;
+                            a.innerText = "刪除";
+                            td.appendChild(a);
+                        }
+                        //其他格式
+                        else {
+                            td.innerText = jsonData[i][fildName];
+                        }
+                        tr.appendChild(td);
+                        PageContent.appendChild(tr);
+                    }
+                }
+            }
+        };
+       
+    }
+</script>

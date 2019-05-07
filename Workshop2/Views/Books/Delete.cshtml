@@ -1,0 +1,103 @@
+﻿@model Workshop2.Models.Book
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+
+<h3>你確定要刪除?</h3>
+<div>
+    <h4>Book</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            書籍類別
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book_Class)
+        </dd>
+
+        <dt>
+            購買時間
+        </dt>
+
+        <dd>
+            @Model.Book_PurchaseTime.Value.ToString("yyyy/MM/dd")
+        </dd>
+
+        <dt>
+            書名
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book_Name)
+        </dd>
+
+        <dt>
+            作者
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book_Author)
+        </dd>
+
+        <dt>
+            出版社
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book_Publisher)
+        </dd>
+
+        <dt>
+            內容簡介
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book_Introduction)
+        </dd>
+
+        <dt>
+            書籍狀態
+        </dt>
+
+        <dd id ="Status">
+            @if (Model.Book_Status == "A")
+            {
+                <b>可以借出</b>
+            }
+            else if (Model.Book_Status == "B")
+            {
+                <b>已借出</b>
+            }
+            else if (Model.Book_Status == "U")
+            {
+                <b>不可借出</b>
+            }
+            else if (Model.Book_Status == "C")
+            {
+                <b>已借出(未領)</b>
+            }
+        </dd>
+
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" id="sub_btn" value="刪除" class="btn btn-danger" /> |
+            <a href="/Books/Index" class="btn btn-primary">回上一頁</a>
+        </div>
+    }
+</div>
+<script>
+    var Status = document.getElementById("Status").children[0].innerText;
+    if (Status == "已借出" || Status == "已借出(未領)") {
+        var sub_btn = document.getElementById("sub_btn");
+        sub_btn.value = "不可刪除";
+        sub_btn.disabled = true;
+    }
+</script>

@@ -1,0 +1,137 @@
+﻿@model Workshop2.Models.VM.BookMemberVM
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>搜尋書籍</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="alert alert-danger" id ="errorAlert" style="display: none">
+        <strong>Error!</strong> 請至少輸入一欄位
+    </div>
+    <table>
+        
+        <tr>
+            <td >書名</td>
+            <td><input type="text" id="Book_Name"/></td>
+        </tr>
+        <tr>
+            <td>圖書類別</td>
+            <td>
+                <select id="Book_Class" >
+                    <option></option>
+                    @foreach (var item in Model.BookClass)
+                    {
+                        <option value="@item.Book_Class">@item.Book_Class</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>借閱狀態</td>
+            <td>
+                <select id="Book_Status" onchange="checkStatus()">
+                    <option></option>
+                    <option value="A">可以借出</option>
+                    <option value="B">已借出</option>
+                    <option value="U">不可借出</option>
+                    <option value="C">已借出(未領)</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>借閱人</td>
+            <td>
+                <select id="Member_Code" >
+                    <option></option>
+                    @foreach (var item in Model.Member)
+                    {
+                        <option value="@item.Member_Code">@item.Member_Name</option>
+                    }
+                </select>
+            </td> 
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="button" onclick="checkField()" value="查詢" class="btn btn-success btn-xs"/>
+                <input type="reset" value="清除" class="btn btn-warning btn-xs"/>
+                <a class="btn btn-primary btn-xs" href="/Books/Create/">新增書籍</a>
+            </td>
+        </tr>
+    </table>
+}
+<hr/>
+<a href="/Books/Index" class="btn btn-primary ">回上一頁</a>
+<a id="searchLink" onclick="checkField()"></a>
+<script>
+    function checkStatus() {
+        var status = document.getElementById("Book_Status");
+        var member = document.getElementById("Member_Code");
+        if (status.value == "A") {
+            member.value = "";
+            member.disabled = true;
+        }
+        else if (status.value == "B") {
+            member.disabled = false;
+        }
+        else if (status.value == "U") {
+            member.value = "";
+            member.disabled = true;
+        }
+        else if (status.value == "C") {
+            member.disabled = false;
+        }
+    }
+
+    function checkField() {
+        var name = document.getElementById("Book_Name");
+        var category = document.getElementById("Book_Class");
+        var status = document.getElementById("Book_Status");
+        var member = document.getElementById("Member_Code");
+        if ((name.value == "" || name.value == null) &&
+            (category.value == "" || category.value == null) &&
+            (status.value == "" || status.value == null) &&
+            (member.value == "" || member.value == null)
+        ) {
+            var errAlert = document.getElementById("errorAlert");
+            errAlert.style.display = "";
+            setTimeout(function(parameters)
+                {errAlert.style.display = "none";}, 3000)
+        } else {
+            var searchLink = document.getElementById("searchLink");
+            CreateLink(searchLink);
+            searchLink.click();
+        }
+
+        function CreateLink(a) {
+            var href = "/Books/SearchResult/0/";
+            if (name.value == "" || name.value == null) {
+                href += "0/";
+            } else {
+                href += name.value + "/";
+            }
+
+            if (category.value == "" || category.value == null) {
+                href += "0/";
+            } else {
+                href += category.value + "/";
+            }
+            
+            if (status.value == "" || status.value == null) {
+                href += "0/";
+            } else {
+                href += status.value + "/";
+            }
+            if (member.value == "" || member.value == null) {
+                href += "0/";
+            } else {
+                href += member.value ;
+            }
+            a.setAttribute("href", href);
+        }
+    }
+</script>

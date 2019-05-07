@@ -1,0 +1,64 @@
+﻿@model Workshop2.Models.VM.BookMemberVM
+
+@{
+    ViewBag.Title = "Create";
+}
+<h2>新增書籍</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        
+        <div class="col-md-12">
+            <table>
+                <tr>
+                    <td>*書名</td>
+                    <td><input type="text" name="Book_Name" required/></td>
+                </tr>
+                <tr>
+                    <td>*作者</td>
+                    <td><input type="text" name="Book_Author" required/></td>
+                </tr>
+                <tr>
+                    <td>*出版商</td>
+                    <td><input type="text" name="Book_Publisher" required/></td>
+                </tr>
+                <tr>
+                    <td>*內容簡介</td>
+                    <td><input type="text" name="Book_Introduction" required/></td>
+                </tr>
+                <tr>
+                    <td>*購書日期</td>
+                    <td><input type="date" name="Book_PurchaseTime" required/></td>
+                </tr>
+                <tr>
+                    <td>*圖書類別</td>
+                    <td>
+                        <select name="Book_Class">
+                            @foreach (var item in Model.BookClass)
+                            {
+                                <option value="@item.Book_Class">@item.Book_Class</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" class="btn btn-success btn-xs"name="" value="存檔"/></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+ 
+}
+<hr/>
+<div>
+    <a href="/Books/Index" class = "btn btn-primary">回上一頁</a>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

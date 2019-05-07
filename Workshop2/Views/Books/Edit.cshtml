@@ -1,0 +1,165 @@
+﻿@model Workshop2.Models.VM.BookMemberVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>編輯書籍</h2>
+
+<div class="alert alert-danger" id ="errorAlert" style="display: none">
+    <strong>Error!</strong> 請輸入借閱人
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="row">
+        <div class="col-md-12">
+        </div>
+        <div class="col-md-12">
+            <table>
+                <tr>
+                    <td>*書名</td>
+                    <td><input type="text" name="Book_Name" value="@Model.Book[0].Book_Name"  required/></td>
+                    <td><input type="text" name="Book_Code" value="@Model.Book[0].Book_Code" hidden /></td>
+                </tr>
+                <tr>
+                    <td>*作者</td>
+                    <td><input type="text" name="Book_Author" value="@Model.Book[0].Book_Author" required /></td>
+                </tr>
+                <tr>
+                    <td>*出版商</td>
+                    <td><input type="text" name="Book_Publisher" value="@Model.Book[0].Book_Publisher" required /></td>
+                </tr>
+                <tr>
+                    <td>*內容簡介</td>
+                    <td><textarea name="Book_Introduction" required>@Model.Book[0].Book_Introduction</textarea></td>
+                </tr>
+                <tr>
+                    <td>*購書日期</td>
+                    <td><input type="date" name="Book_PurchaseTime" value="@Model.Book[0].Book_PurchaseTime.Value.ToString("yyyy-MM-dd")"  required/></td>
+                </tr>
+                <tr>
+                    <td>*圖書類別</td>
+                    <td >
+                        <select name="Book_Class" required>
+                            @foreach (var item in Model.BookClass)
+                            {
+                                if (item.Book_Class == Model.Book[0].Book_Class)
+                                {
+                                    <option value="@item.Book_Class" selected="selected">@item.Book_Class</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Book_Class">@item.Book_Class</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>*借閱狀態</td>
+                    <td>
+                        <select name="Book_Status" id ="Status"  onchange="checkStatus()">
+                        @if (Model.Book[0].Book_Status == "A")
+                        {
+                            <option value="A" selected="selected">可以借出</option>
+                            <option value="B">已借出</option>
+                            <option value="U">不可借出</option>
+                            <option value="C">已借出(未領)</option>
+                        }
+                        else if (Model.Book[0].Book_Status == "B")
+                        {
+                            <option value="A" >可以借出</option>
+                            <option value="B" selected="selected">已借出</option>
+                            <option value="U">不可借出</option>
+                            <option value="C">已借出(未領)</option>
+                        }
+                        else if (Model.Book[0].Book_Status == "U")
+                        {
+                            <option value="A" >可以借出</option>
+                            <option value="B">已借出</option>
+                            <option value="U" selected="selected">不可借出</option>
+                            <option value="C">已借出(未領)</option>
+                        }
+                        else if (Model.Book[0].Book_Status == "C")
+                        {
+                            <option value="A" >可以借出</option>
+                            <option value="B">已借出</option>
+                            <option value="U">不可借出</option>
+                            <option value="C" selected="selected">已借出(未領)</option>
+                        }
+                        </select >
+                    </td>
+                </tr>
+                <tr>
+                    <td>借閱人</td>
+                    <td>
+                        <select name="Member_Code" id="member">
+                            <option></option>
+                            @foreach (var item in Model.Member)
+                            {
+                                if (item.Member_Code == Model.Book[0].Member_Code)
+                                {
+                                    <option value="@item.Member_Code" selected="selected" >@item.Member_Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Member_Code" >@item.Member_Name</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <a href="/Books/Index" class="btn btn-primary btn-xs">回上一頁</a>
+                        <a class="btn btn-danger btn-xs" href="/Books/Delete/@Model.Book[0].Book_Code">刪除</a>
+                        <input class="btn-success btn btn-xs" type="button" id="submitA" onclick="checkMember()" name="" value="存檔" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+}
+<script>
+    checkStatus();
+   
+    function checkStatus() {
+        var status = document.getElementById("Status");
+        var member = document.getElementById("member");
+        if (status.value == "A") {
+            member.value = "";
+            member.disabled = true;
+        }
+        else if (status.value == "B") {
+            member.disabled = false;
+        }
+        else if (status.value == "U") {
+            member.value = "";
+            member.disabled = true;
+        }
+        else if (status.value == "C") {
+            member.disabled = false;
+        }
+    }
+
+    function checkMember() {
+        var member = document.getElementById("member");
+        var errAlert = document.getElementById("errorAlert");
+        var submitA = document.getElementById("submitA");
+        if (member.disabled == false && member.value == "") {
+            errAlert.style.display = "";
+            setTimeout(function(parameters) { errAlert.style.display = "none"; }, 3000);
+        } else {
+            submitA.setAttribute("type", "submit");
+            submitA.click();
+        }
+    }
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

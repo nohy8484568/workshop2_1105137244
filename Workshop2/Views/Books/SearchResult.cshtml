@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Workshop2.Models.Book>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>查詢結果</h2>
+
+<p>
+    <a href="/Books/Index" class="btn btn-primary">回首頁</a>
+    <a class="btn btn-primary" href="/Books/Create/">新增書籍</a>
+    <a class="btn btn-primary" href="/Books/Search/">搜尋書籍</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                圖書類別
+            </th>
+            <th>
+                書名
+            </th>
+            <th>
+                購書日期
+            </th>
+            <th>
+                借閱狀態
+            </th>
+            <th>
+                借閱人
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="PageContent">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="display: none">
+                    <input type="text" value="@item.Book_Code" hidden />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book_Class)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book_Name)
+                </td>
+                <td>
+                    @item.Book_PurchaseTime.Value.ToString("yyyy/MM/dd")
+                </td>
+                <td>
+                    @if (item.Book_Status == "A")
+                {
+                        <b>可以借出</b>
+                    }
+                    else if (item.Book_Status == "B")
+                    {
+                        <b>已借出</b>
+                    }
+                    else if (item.Book_Status == "U")
+                    {
+                        <b>不可借出</b>
+                    }
+                    else if (item.Book_Status == "C")
+                    {
+                        <b>已借出(未領)</b>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member_Name)
+                </td>
+                <td>
+                    <a class="btn btn-info" href="/Books/Edit/@item.Book_Code">編輯</a>
+                    <a class="btn btn-danger" href="/Books/Delete/@item.Book_Code">刪除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
