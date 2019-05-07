@@ -3,7 +3,11 @@
 @{
     ViewBag.Title = "Index";
 }
-
+<style>
+    body {
+        font-family: Microsoft JhengHei;
+    }
+</style>
 <h2>查詢結果</h2>
 
 <p>
@@ -11,8 +15,8 @@
     <a class="btn btn-primary" href="/Books/Create/">新增書籍</a>
     <a class="btn btn-primary" href="/Books/Search/">搜尋書籍</a>
 </p>
-<table class="table">
-    <thead>
+<table class="table table-hover" >
+    <thead style="background: #58B2DC;" >
         <tr>
             <th>
                 圖書類別
@@ -33,7 +37,7 @@
             </th>
         </tr>
     </thead>
-    <tbody id="PageContent">
+    <tbody id="PageContent" >
         @foreach (var item in Model)
         {
             <tr>

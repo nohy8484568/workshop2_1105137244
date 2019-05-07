@@ -3,7 +3,11 @@
 @{
     ViewBag.Title = "Edit";
 }
-
+<style>
+    body {
+        font-family: Microsoft JhengHei;
+    }
+</style>
 <h2>編輯書籍</h2>
 
 <div class="alert alert-danger" id ="errorAlert" style="display: none">
@@ -17,32 +21,32 @@
         <div class="col-md-12">
         </div>
         <div class="col-md-12">
-            <table>
+            <table class="table">
                 <tr>
                     <td>*書名</td>
-                    <td><input type="text" name="Book_Name" value="@Model.Book[0].Book_Name"  required/></td>
+                    <td><input type="text" name="Book_Name" value="@Model.Book[0].Book_Name"  required class="form-control"/></td>
                     <td><input type="text" name="Book_Code" value="@Model.Book[0].Book_Code" hidden /></td>
                 </tr>
                 <tr>
                     <td>*作者</td>
-                    <td><input type="text" name="Book_Author" value="@Model.Book[0].Book_Author" required /></td>
+                    <td><input type="text" name="Book_Author" value="@Model.Book[0].Book_Author" required class="form-control" /></td>
                 </tr>
                 <tr>
                     <td>*出版商</td>
-                    <td><input type="text" name="Book_Publisher" value="@Model.Book[0].Book_Publisher" required /></td>
+                    <td><input type="text" name="Book_Publisher" value="@Model.Book[0].Book_Publisher" required class="form-control"/></td>
                 </tr>
                 <tr>
                     <td>*內容簡介</td>
-                    <td><textarea name="Book_Introduction" required>@Model.Book[0].Book_Introduction</textarea></td>
+                    <td><textarea name="Book_Introduction" required class="form-control">@Model.Book[0].Book_Introduction</textarea></td>
                 </tr>
                 <tr>
                     <td>*購書日期</td>
-                    <td><input type="date" name="Book_PurchaseTime" value="@Model.Book[0].Book_PurchaseTime.Value.ToString("yyyy-MM-dd")"  required/></td>
+                    <td><input type="date" name="Book_PurchaseTime" value="@Model.Book[0].Book_PurchaseTime.Value.ToString("yyyy-MM-dd")"  required class="form-control"/></td>
                 </tr>
                 <tr>
                     <td>*圖書類別</td>
                     <td >
-                        <select name="Book_Class" required>
+                        <select name="Book_Class" required class="form-control">
                             @foreach (var item in Model.BookClass)
                             {
                                 if (item.Book_Class == Model.Book[0].Book_Class)
@@ -60,7 +64,7 @@
                 <tr>
                     <td>*借閱狀態</td>
                     <td>
-                        <select name="Book_Status" id ="Status"  onchange="checkStatus()">
+                        <select name="Book_Status" id ="Status"  onchange="checkStatus()" class="form-control">
                         @if (Model.Book[0].Book_Status == "A")
                         {
                             <option value="A" selected="selected">可以借出</option>
@@ -95,7 +99,7 @@
                 <tr>
                     <td>借閱人</td>
                     <td>
-                        <select name="Member_Code" id="member">
+                        <select name="Member_Code" id="member" class="form-control">
                             <option></option>
                             @foreach (var item in Model.Member)
                             {
@@ -114,9 +118,9 @@
                 <tr>
                     <td></td>
                     <td>
-                        <a href="/Books/Index" class="btn btn-primary btn-xs">回上一頁</a>
-                        <a class="btn btn-danger btn-xs" href="/Books/Delete/@Model.Book[0].Book_Code">刪除</a>
-                        <input class="btn-success btn btn-xs" type="button" id="submitA" onclick="checkMember()" name="" value="存檔" />
+                        <a href="/Books/Index" class="btn btn-primary ">回首頁</a>
+                        <a class="btn btn-danger " href="/Books/Delete/@Model.Book[0].Book_Code">刪除</a>
+                        <input class="btn-success btn" type="button" id="submitA" onclick="checkMember()" name="" value="存檔" />
                     </td>
                 </tr>
             </table>

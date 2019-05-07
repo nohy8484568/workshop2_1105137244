@@ -3,6 +3,11 @@
 @{
     ViewBag.Title = "Create";
 }
+<style>
+    body {
+        font-family: Microsoft JhengHei;
+    }
+</style>
 <h2>新增書籍</h2>
 
 
@@ -12,31 +17,31 @@
     <div class="row">
         
         <div class="col-md-12">
-            <table>
+            <table class="table">
                 <tr>
                     <td>*書名</td>
-                    <td><input type="text" name="Book_Name" required/></td>
+                    <td><input type="text" name="Book_Name"  class="form-control" required/></td>
                 </tr>
                 <tr>
                     <td>*作者</td>
-                    <td><input type="text" name="Book_Author" required/></td>
+                    <td><input type="text" name="Book_Author" class="form-control" required/></td>
                 </tr>
                 <tr>
                     <td>*出版商</td>
-                    <td><input type="text" name="Book_Publisher" required/></td>
+                    <td><input type="text" name="Book_Publisher" class="form-control" required/></td>
                 </tr>
                 <tr>
                     <td>*內容簡介</td>
-                    <td><input type="text" name="Book_Introduction" required/></td>
+                    <td><textarea  name="Book_Introduction" class="form-control" required></textarea></td>
                 </tr>
                 <tr>
                     <td>*購書日期</td>
-                    <td><input type="date" name="Book_PurchaseTime" required/></td>
+                    <td><input type="date" name="Book_PurchaseTime" class="form-control" required/></td>
                 </tr>
                 <tr>
                     <td>*圖書類別</td>
                     <td>
-                        <select name="Book_Class">
+                        <select name="Book_Class" class="form-control">
                             @foreach (var item in Model.BookClass)
                             {
                                 <option value="@item.Book_Class">@item.Book_Class</option>
@@ -46,7 +51,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><input type="submit" class="btn btn-success btn-xs"name="" value="存檔"/></td>
+                    <td><input type="submit" class="btn btn-success"name="" value="存檔"/></td>
                 </tr>
             </table>
         </div>
@@ -56,7 +61,7 @@
 }
 <hr/>
 <div>
-    <a href="/Books/Index" class = "btn btn-primary">回上一頁</a>
+    <a href="/Books/Index" class = "btn btn-primary">回首頁</a>
 </div>
 
 @section Scripts {

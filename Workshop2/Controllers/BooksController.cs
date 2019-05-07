@@ -63,6 +63,17 @@ namespace Workshop2.Controllers
                 var code = Convert.ToInt32(member);
                 books = books.Where(x => x.Member_Code== code).OrderByDescending(x => x.Book_PurchaseTime).ToList();
             }
+
+            if (books != null)
+            {
+                foreach (var item in books)
+                {
+                    if (item.Member_Code != null)
+                    {
+                        item.Member_Name = db.Member.Find(item.Member_Code).Member_Name;
+                    }
+                }
+            }
             return View(books);
         }
        
