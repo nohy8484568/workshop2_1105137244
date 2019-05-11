@@ -1,4 +1,4 @@
-﻿@model Workshop2.Models.VM.BookMemberVM
+﻿@model Workshop2.Models.ViewModel.BooksCreateViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -14,54 +14,73 @@
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    <div class="row">
+    
+    <div class="form-horizontal">
+        <hr />
         
-        <div class="col-md-12">
-            <table class="table">
-                <tr>
-                    <td>*書名</td>
-                    <td><input type="text" name="Book_Name"  class="form-control" required/></td>
-                </tr>
-                <tr>
-                    <td>*作者</td>
-                    <td><input type="text" name="Book_Author" class="form-control" required/></td>
-                </tr>
-                <tr>
-                    <td>*出版商</td>
-                    <td><input type="text" name="Book_Publisher" class="form-control" required/></td>
-                </tr>
-                <tr>
-                    <td>*內容簡介</td>
-                    <td><textarea  name="Book_Introduction" class="form-control" required></textarea></td>
-                </tr>
-                <tr>
-                    <td>*購書日期</td>
-                    <td><input type="date" name="Book_PurchaseTime" class="form-control" required/></td>
-                </tr>
-                <tr>
-                    <td>*圖書類別</td>
-                    <td>
-                        <select name="Book_Class" class="form-control">
-                            @foreach (var item in Model.BookClass)
-                            {
-                                <option value="@item.Book_Class">@item.Book_Class</option>
-                            }
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="submit" class="btn btn-success"name="" value="存檔"/></td>
-                </tr>
-            </table>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Book.Book_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Book.Book_Name, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Book.Book_Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Book.Book_Author, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Book.Book_Author, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Book.Book_Author, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Book.Book_Publisher, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Book.Book_Publisher, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Book.Book_Publisher, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Book.Book_Introduction, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextArea("Book.Book_Introduction",new {@id = "Book_Book_Introduction"})
+                @Html.ValidationMessageFor(model => model.Book.Book_Introduction, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Book.Book_PurchaseTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Book.Book_PurchaseTime, new {htmlAttributes = new {@class = "form-control",@Type = "date"}})
+                @Html.ValidationMessageFor(model => model.Book.Book_PurchaseTime, "", new {@class = "text-danger"})
+            </div>
         </div>
 
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Book.Class_Code, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" name="Book.Class_Code" id="Book_Class_Code">
+                    @foreach (var item in Model.BookClasses)
+                    {
+                        <option value="@item.Class_Code">@item.Book_Class</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="新增" class="btn btn-success" />
+            </div>
+        </div>
     </div>
- 
 }
-<hr/>
+
 <div>
-    <a href="/Books/Index" class = "btn btn-primary">回首頁</a>
+    @Html.ActionLink("返回至列表", "Index",null,new {@class="btn btn-primary"})
 </div>
 
 @section Scripts {

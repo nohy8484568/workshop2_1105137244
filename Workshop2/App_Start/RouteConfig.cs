@@ -15,12 +15,8 @@ namespace Workshop2
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}/{name}/{category}/{status}/{member}",
-                defaults: new { controller = "Books", action = "Index", id = UrlParameter.Optional,
-                    name = UrlParameter.Optional,
-                    category = UrlParameter.Optional,
-                    status = UrlParameter.Optional,
-                    member = UrlParameter.Optional }
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Books", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

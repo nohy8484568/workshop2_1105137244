@@ -1,87 +1,90 @@
-﻿@model Workshop2.Models.Book
+﻿@model Workshop2.Models.ViewModel.BooksEditViewModel
 
 @{
     ViewBag.Title = "Delete";
 }
-
 <style>
     body {
         font-family: Microsoft JhengHei;
     }
 </style>
-<h3>你確定要刪除?</h3>
+<h2>刪除書籍</h2>
+
+<h3>你確定要刪除它?</h3>
 <div>
+
     <hr />
-    <dl class="dl-horizontal" style="font-size: 16px">
+    <dl class="dl-horizontal">
         <dt>
-            書籍類別
+            @Html.DisplayNameFor(model => model.Book.Book_Code)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Book_Class)
+            @Html.DisplayFor(model => model.Book.Book_Code)
         </dd>
 
         <dt>
-            購買時間
+            @Html.DisplayNameFor(model => model.Book.Book_PurchaseTime)
         </dt>
 
         <dd>
-            @Model.Book_PurchaseTime.Value.ToString("yyyy/MM/dd")
+            @Model.Book.Book_PurchaseTime.Value.ToString("yyyy/MM/dd")
         </dd>
 
         <dt>
-            書名
+            @Html.DisplayNameFor(model => model.Book.Book_Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Book_Name)
+            @Html.DisplayFor(model => model.Book.Book_Name)
         </dd>
 
         <dt>
-            作者
+            @Html.DisplayNameFor(model => model.Book.Book_Author)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Book_Author)
+            @Html.DisplayFor(model => model.Book.Book_Author)
         </dd>
 
         <dt>
-            出版社
+            @Html.DisplayNameFor(model => model.Book.Book_Publisher)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Book_Publisher)
+            @Html.DisplayFor(model => model.Book.Book_Publisher)
         </dd>
 
         <dt>
-            內容簡介
+            @Html.DisplayNameFor(model => model.Book.Book_Introduction)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Book_Introduction)
+            @Html.DisplayFor(model => model.Book.Book_Introduction)
         </dd>
-
         <dt>
-            書籍狀態
+            @Html.DisplayNameFor(model => model.Book.Class_Code)
         </dt>
 
-        <dd id ="Status">
-            @if (Model.Book_Status == "A")
-            {
-                <b>可以借出</b>
-            }
-            else if (Model.Book_Status == "B")
-            {
-                <b>已借出</b>
-            }
-            else if (Model.Book_Status == "U")
-            {
-                <b>不可借出</b>
-            }
-            else if (Model.Book_Status == "C")
-            {
-                <b>已借出(未領)</b>
-            }
+        <dd>
+            @Html.DisplayFor(model => model.BookClasses
+                .Find(x=>x.Class_Code.Equals(Model.Book.Class_Code)).Book_Class)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Book.Book_Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BookStatuses
+                .Find(x=>x.StatusCode.Equals(Model.Book.Book_Status)).StatusName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Book.Member_Code)
+        </dt>
+
+        <dd id="member">
+            @Html.DisplayFor(model => model.Members
+                .Find(x=>x.Member_Code.Equals(Model.Book.Member_Code)).Member_Name)
         </dd>
 
 
@@ -91,16 +94,21 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" id="sub_btn" value="刪除" class="btn btn-danger" /> |
-            <a href="/Books/Index" class="btn btn-primary">回首頁</a>
+            <input type="submit" value="刪除" id="submitBtn" class="btn btn-danger" /> |
+            @Html.ActionLink("返回至列表", "Index", null,new { @class = "btn btn-primary" })
         </div>
     }
 </div>
 <script>
-    var Status = document.getElementById("Status").children[0].innerText;
-    if (Status == "已借出" || Status == "已借出(未領)") {
-        var sub_btn = document.getElementById("sub_btn");
-        sub_btn.value = "不可刪除";
-        sub_btn.disabled = true;
+    checkCanDelect();
+    //確認是否可以刪除
+    function checkCanDelect() {
+        var member = document.getElementById("member");
+        var submitBtn = document.getElementById("submitBtn");
+        
+        if (member.innerText != "") {
+            submitBtn.value = "不可刪除";
+            submitBtn.disabled = true;
+        }
     }
 </script>

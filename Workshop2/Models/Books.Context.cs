@@ -13,10 +13,10 @@ namespace Workshop2.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class HungEntities : DbContext
+    public partial class ChiChenHanEntities : DbContext
     {
-        public HungEntities()
-            : base("name=HungEntities")
+        public ChiChenHanEntities()
+            : base("name=ChiChenHanEntities")
         {
         }
     
@@ -27,6 +27,7 @@ namespace Workshop2.Models
     
         public virtual DbSet<Book> Book { get; set; }
         public virtual DbSet<BookClass> BookClass { get; set; }
+        public virtual DbSet<BookStatus> BookStatus { get; set; }
         public virtual DbSet<Member> Member { get; set; }
     }
 }

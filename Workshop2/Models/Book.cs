@@ -7,22 +7,37 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel;
+
 namespace Workshop2.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Book
     {
         public int Book_Code { get; set; }
-        public string Book_Class { get; set; }
+
+        [DisplayName("書籍類別")]
+        public Nullable<int> Class_Code { get; set; }
+
+        [DisplayName("購書日期"), Required(ErrorMessage = "{0}是必要欄位")]
         public Nullable<System.DateTime> Book_PurchaseTime { get; set; }
+
+        [DisplayName("書名"), Required(ErrorMessage = "{0}是必要欄位")]
         public string Book_Name { get; set; }
+
+        [DisplayName("作者"), Required(ErrorMessage = "{0}是必要欄位")]
         public string Book_Author { get; set; }
+
+        [DisplayName("出版商"), Required(ErrorMessage = "{0}是必要欄位")]
         public string Book_Publisher { get; set; }
+        [DisplayName("內容簡介"), Required(ErrorMessage = "{0}是必要欄位")]
         public string Book_Introduction { get; set; }
+        [DisplayName("借閱狀態")]
         public string Book_Status { get; set; }
+        [DisplayName("借閱人")]
         public Nullable<int> Member_Code { get; set; }
-        public string Member_Name { get; set; }
     }
 }

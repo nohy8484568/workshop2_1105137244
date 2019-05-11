@@ -4,13 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="HungModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ChiChenHanModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Book">
           <Key>
             <PropertyRef Name="Book_Code" />
           </Key>
           <Property Name="Book_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Book_Class" Type="nvarchar" MaxLength="20" />
+          <Property Name="Class_Code" Type="int" />
           <Property Name="Book_PurchaseTime" Type="date" />
           <Property Name="Book_Name" Type="nvarchar" MaxLength="30" />
           <Property Name="Book_Author" Type="nvarchar" MaxLength="30" />
@@ -18,7 +18,6 @@
           <Property Name="Book_Introduction" Type="nvarchar(max)" />
           <Property Name="Book_Status" Type="char" MaxLength="1" />
           <Property Name="Member_Code" Type="int" />
-          <Property Name="Member_Name" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="BookClass">
           <Key>
@@ -27,6 +26,13 @@
           <Property Name="Class_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Book_Class" Type="nvarchar" MaxLength="20" />
         </EntityType>
+        <EntityType Name="BookStatus">
+          <Key>
+            <PropertyRef Name="StatusCode" />
+          </Key>
+          <Property Name="StatusCode" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="Member">
           <Key>
             <PropertyRef Name="Member_Code" />
@@ -34,21 +40,23 @@
           <Property Name="Member_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Member_Name" Type="nvarchar" MaxLength="30" />
         </EntityType>
-        <EntityContainer Name="HungModelStoreContainer">
+        <EntityContainer Name="ChiChenHanModelStoreContainer">
           <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BookClass" EntityType="Self.BookClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookStatus" EntityType="Self.BookStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="HungModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="ChiChenHanModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Book">
           <Key>
             <PropertyRef Name="Book_Code" />
           </Key>
           <Property Name="Book_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Book_Class" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Class_Code" Type="Int32" />
           <Property Name="Book_PurchaseTime" Type="DateTime" Precision="0" />
           <Property Name="Book_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Book_Author" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
@@ -56,7 +64,6 @@
           <Property Name="Book_Introduction" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Book_Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="Member_Code" Type="Int32" />
-          <Property Name="Member_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="BookClass">
           <Key>
@@ -65,6 +72,13 @@
           <Property Name="Class_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Book_Class" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="BookStatus">
+          <Key>
+            <PropertyRef Name="StatusCode" />
+          </Key>
+          <Property Name="StatusCode" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Member">
           <Key>
             <PropertyRef Name="Member_Code" />
@@ -72,9 +86,10 @@
           <Property Name="Member_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Member_Name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityContainer Name="ChiEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="ChiChenHanEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Book" EntityType="Self.Book" />
           <EntitySet Name="BookClass" EntityType="Self.BookClass" />
+          <EntitySet Name="BookStatus" EntityType="Self.BookStatus" />
           <EntitySet Name="Member" EntityType="Self.Member" />
         </EntityContainer>
       </Schema>
@@ -82,13 +97,12 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="HungModelStoreContainer" CdmEntityContainer="ChiEntities">
+        <EntityContainerMapping StorageEntityContainer="ChiChenHanModelStoreContainer" CdmEntityContainer="ChiChenHanEntities">
           <EntitySetMapping Name="Book">
-            <EntityTypeMapping TypeName="HungModel.Book">
+            <EntityTypeMapping TypeName="ChiChenHanModel.Book">
               <MappingFragment StoreEntitySet="Book">
-                <ScalarProperty Name="Member_Name" ColumnName="Member_Name" />
                 <ScalarProperty Name="Book_Code" ColumnName="Book_Code" />
-                <ScalarProperty Name="Book_Class" ColumnName="Book_Class" />
+                <ScalarProperty Name="Class_Code" ColumnName="Class_Code" />
                 <ScalarProperty Name="Book_PurchaseTime" ColumnName="Book_PurchaseTime" />
                 <ScalarProperty Name="Book_Name" ColumnName="Book_Name" />
                 <ScalarProperty Name="Book_Author" ColumnName="Book_Author" />
@@ -100,15 +114,23 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BookClass">
-            <EntityTypeMapping TypeName="HungModel.BookClass">
+            <EntityTypeMapping TypeName="ChiChenHanModel.BookClass">
               <MappingFragment StoreEntitySet="BookClass">
                 <ScalarProperty Name="Class_Code" ColumnName="Class_Code" />
                 <ScalarProperty Name="Book_Class" ColumnName="Book_Class" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BookStatus">
+            <EntityTypeMapping TypeName="ChiChenHanModel.BookStatus">
+              <MappingFragment StoreEntitySet="BookStatus">
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Member">
-            <EntityTypeMapping TypeName="HungModel.Member">
+            <EntityTypeMapping TypeName="ChiChenHanModel.Member">
               <MappingFragment StoreEntitySet="Member">
                 <ScalarProperty Name="Member_Code" ColumnName="Member_Code" />
                 <ScalarProperty Name="Member_Name" ColumnName="Member_Name" />

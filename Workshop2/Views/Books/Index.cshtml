@@ -1,51 +1,111 @@
 ﻿@using Workshop2.Models
-@model Workshop2.Models.VM.BookMemberVM
+@model Workshop2.Models.ViewModel.BooksIndexViewModel
 
 @{
     ViewBag.Title = "Index";
+    Book book = new Book();
 }
 <style>
-    body{
+    body {
         font-family: Microsoft JhengHei;
     }
 </style>
-<h2>圖書維護</h2>
+@using (Html.BeginForm("Index", "Books"))
+{
+    @Html.AntiForgeryToken()
 
+    <div class="form-inline">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => book.Class_Code, htmlAttributes: new { @class = "control-label" })
+            <div class="">
+                <select class="form-control" name="book.Class_Code" id="book_Class_Code">
+                    <option></option>
+                    @foreach (var item in Model.BookClasses)
+                    {
+                        <option value="@item.Class_Code">@item.Book_Class</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+                @Html.LabelFor(model => book.Book_Name, htmlAttributes: new { @class = "control-label" })
+                <div class="">
+                    @Html.EditorFor(model => book.Book_Name, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => book.Book_Status, htmlAttributes: new { @class = "control-label" })
+                <div class="">
+                    <select class="form-control" name="book.Book_Status" id="book_Book_Status" onchange="checkStatus()">
+                        <option></option>
+                        @foreach (var item in Model.BookStatuses)
+                        {
+                            <option value="@item.StatusCode">@item.StatusName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => book.Member_Code, htmlAttributes: new { @class = "control-label" })
+                <div class="">
+                    <select class="form-control" name="book.Member_Code" id="book_Member_Code">
+                        <option></option>
+                        @foreach (var item in Model.Members)
+                        {
+                            <option value="@item.Member_Code">@item.Member_Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2">
+                <input type="submit" value="搜尋" class="btn btn-success" />
+            </div>        
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2">
+                <input type="reset" value="清除" onmouseleave="checkStatus()" class="btn btn-warning" />
+            </div>        
+        </div>
+    </div>
+    <hr />
+}
 <p>
-    <a class="btn btn-primary" href="/Books/Create/">新增書籍</a>
-    <a class="btn btn-primary" href="/Books/Search/">搜尋書籍</a>
+    @Html.ActionLink("新增書籍", "Create", null, new { @class = "btn btn-primary" })
 </p>
-<table class="table table-hover ">
-    <thead style="background: #58B2DC;">
-    <tr>
+<table class="table table-hover">
+    <tr style="background: #58B2DC;">
         <th>
-            圖書類別
+            @Html.DisplayNameFor(model => model.Books.First().Class_Code)
         </th>
         <th>
-            書名
+            @Html.DisplayNameFor(model => model.Books.First().Book_Name)
         </th>
         <th>
-            購書日期
+            @Html.DisplayNameFor(model => model.Books.First().Book_PurchaseTime)
         </th>
         <th>
-            借閱狀態
+            @Html.DisplayNameFor(model => model.Books.First().Book_Status)
         </th>
         <th>
-            借閱人
+            @Html.DisplayNameFor(model => model.Books.First().Member_Code)
         </th>
-        <th>
-        </th>
+        <th></th>
     </tr>
-    </thead>
-    <tbody id ="PageContent">
-    @foreach (var item in Model.Book)
+
+    @foreach (var item in Model.Books)
     {
         <tr>
-            <td style="display: none">
-                <input type="text" value="@item.Book_Code" hidden/>
-            </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Book_Class)
+                @Html.DisplayFor(modelItem => modelItem.BookClasses
+                    .Find(x=>x.Class_Code == item.Class_Code).Book_Class)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Book_Name)
@@ -54,140 +114,49 @@
                 @item.Book_PurchaseTime.Value.ToString("yyyy/MM/dd")
             </td>
             <td>
-                @if (item.Book_Status == "A")
-                {
-                    <b>可以借出</b>
-                }
-                else if (item.Book_Status == "B")
-                {
-                    <b>已借出</b>
-                }
-                else if (item.Book_Status == "U")
-                {
-                    <b>不可借出</b>
-                }
-                else if (item.Book_Status == "C")
-                {
-                    <b>已借出(未領)</b>
-                }
+                @Html.DisplayFor(modelItem => modelItem.BookStatuses
+                    .Find(x=>x.StatusCode == item.Book_Status).StatusName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Member_Name)
+                @Html.DisplayFor(modelItem => modelItem.Members
+                    .Find(x=>x.Member_Code == item.Member_Code).Member_Name)
             </td>
             <td>
-                <a class="btn btn-info" href="/Books/Edit/@item.Book_Code">編輯</a>
-                <a class="btn btn-danger" href="/Books/Delete/@item.Book_Code">刪除</a>
+                @Html.ActionLink("編輯", "Edit", new { id = item.Book_Code }, new { @class = "btn btn-info" })
+                @Html.ActionLink("刪除", "Delete", new { id = item.Book_Code }, new { @class = "btn btn-danger" })
             </td>
         </tr>
     }
-    </tbody>
+
 </table>
-<div class="pagination" style="font-size: 16px">
-    <a href="#" onclick="changePage('forward')" >&laquo;</a>
-    <input type="number" id ="nowPage" style="width: 40px; text-align: center;padding-left: 5px" min="1"  readonly/>
-    /&nbsp;<b id="TotalPage"  ></b>
-    <a href="#" onclick="changePage('backward')">&raquo;</a>
-</div>
-
 <script>
-    
-    var totalPage = Math.ceil(@ViewBag.BookNum / 7);
-    var nowPage = document.getElementById("nowPage");
-    nowPage.setAttribute("max",totalPage);
-    document.getElementById("TotalPage").innerText = totalPage;
-    nowPage.value = 1;
-    var filed = ["Book_Class", "Book_Name", "Book_PurchaseTime", "Book_Status", "Member_Name", ""];
-
-    function changePage(actionFB) {
-        if (actionFB=='forward') {
-            if (nowPage.value != 1) {
-                nowPage.value -= 1;
-            }
+    FillSearchField();
+    function checkStatus() {
+        var status = document.getElementById("book_Book_Status");
+        var member = document.getElementById("book_Member_Code");
+        if (status.value == "A") {
+            member.value = "";
+            member.disabled = true;
+        } else if (status.value == "B") {
+            member.disabled = false;
+        } else if (status.value == "U") {
+            member.value = "";
+            member.disabled = true;
+        } else if (status.value == "C") {
+            member.disabled = false;
         } else {
-            if (nowPage.value != parseInt(totalPage)) {
-                nowPage.value = parseInt(nowPage.value)+1;
-            }
+            member.disabled = false;
         }
-        var PageContent = document.getElementById("PageContent");
-        while (PageContent.firstChild) {
-            PageContent.removeChild(PageContent.firstChild);
-        }
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "/Books/PageInfo/"+nowPage.value, true);
-        xhttp.send();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var jsonData = JSON.parse(this.response);
-                for (var i = 0; i < jsonData.length; i++) {
-                    var tr = document.createElement("tr");
-                    for (var k=0 ;k< filed.length;k++) {
-                        var td = document.createElement("td");
-                        var fildName = filed[k];
-                        //檢測是否為日期或字串
-                        if ( typeof jsonData[i][fildName] == "string") {
-                            //日期formate(yyyy/MM/dd)
-                            if (jsonData[i][fildName].match(/Date.*/) ) {
-                                var dateString = jsonData[i][fildName].replace("/Date(","").replace(")/","");
-                                var date = new Date(parseInt(dateString));
-                                var year =date.getUTCFullYear(),
-                                        month=date.getUTCMonth()+1,
-                                        day=date.getUTCDay()+1,
-                                        fulldate;
-                                fulldate = year+"/";
-                                if (month <10) {
-                                    fulldate = fulldate + "0" + month + "/";
-                                } else {
-                                    fulldate = fulldate + month + "/";
-                                }
-                                if (day<10) {
-                                    fulldate = fulldate + "0" + day;
-                                } else {
-                                    fulldate = fulldate + day;
-                                }
-                                td.innerText = fulldate;
-                            }
-                            //轉換狀態碼
-                            else if (fildName == "Book_Status") {
-                                if (jsonData[i][fildName] == "A") {
-                                    td.innerText = "可以借出"
-                                } 
-                                else if(jsonData[i][fildName] == "B"){
-                                    td.innerText = "已借出"
-                                } 
-                                else if(jsonData[i][fildName] == "U"){
-                                    td.innerText = "不可借出"
-                                } 
-                                else if(jsonData[i][fildName] == "C"){
-                                    td.innerText = "已借出(未領)"
-                                }
-                            }
-                            else {
-                                td.innerText = jsonData[i][fildName];
-                            }
-                        } 
-                        //建立最後一列功能欄
-                        else if (k == filed.length-1) {
-                            var a = document.createElement("a");
-                            a.setAttribute("class","btn btn-info") ;
-                            a.setAttribute("href","/Books/Edit/"+jsonData[i]["Book_Code"]) ;
-                            a.innerText = "編輯";
-                            td.appendChild(a);
-                            a = document.createElement("a");
-                            a.setAttribute("class","btn btn-danger") ;
-                            a.setAttribute("href","/Books/Delete/"+jsonData[i]["Book_Code"]) ;
-                            a.innerText = "刪除";
-                            td.appendChild(a);
-                        }
-                        //其他格式
-                        else {
-                            td.innerText = jsonData[i][fildName];
-                        }
-                        tr.appendChild(td);
-                        PageContent.appendChild(tr);
-                    }
-                }
-            }
-        };
-       
+    }
+    function FillSearchField() {
+        var name = document.getElementById("book_Book_Name");
+        var category = document.getElementById("book_Class_Code");
+        var status = document.getElementById("book_Book_Status");
+        var member = document.getElementById("book_Member_Code");
+        name.value = "@ViewBag.name";
+        category.value = "@ViewBag.category";
+        status.value = "@ViewBag.status";
+        member.value = "@ViewBag.member";
+        checkStatus();
     }
 </script>

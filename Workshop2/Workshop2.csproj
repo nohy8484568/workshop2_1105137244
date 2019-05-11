@@ -161,10 +161,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Books.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\BookStatus.cs">
+      <DependentUpon>Books.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Member.cs">
       <DependentUpon>Books.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\VM\BookMemberVM.cs" />
+    <Compile Include="Models\Service\BooksService.cs" />
+    <Compile Include="Models\ViewModel\BooksViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -178,8 +182,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Models\Books.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Books.Context.cs</LastGenOutput>
       <DependentUpon>Books.edmx</DependentUpon>
+      <LastGenOutput>Books.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\Books.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -221,8 +225,6 @@
     <Content Include="Views\Books\Delete.cshtml" />
     <Content Include="Views\Books\Edit.cshtml" />
     <Content Include="Views\Books\Index.cshtml" />
-    <Content Include="Views\Books\Search.cshtml" />
-    <Content Include="Views\Books\SearchResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
